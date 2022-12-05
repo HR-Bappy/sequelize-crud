@@ -2,12 +2,14 @@ const express = require("express");
 const cors = require("cors");
 const productRouter = require('./app/routes/product.routes')
 const authRouter = require('./app/routes/auth.routes')
-
+const hotelRouter = require("./app/routes/hotel.routes");
+const roomRouter = require("./app/routes/room.routes");
+require("dotenv").config();
 
 const app = express();
 
 var corsOptions = {
-  origin: "http://localhost:8081"
+	origin: "http://localhost:8081",
 };
 
 app.use(cors(corsOptions));
@@ -20,17 +22,21 @@ app.use(express.urlencoded({ extended: true }));
 
 const db = require("./app/models");
 
-db.sequelize.sync()
-  .then(() => {
-    console.log("Synced db.");
-  })
-  .catch((err) => {
-    console.log("Failed to sync db: " + err.message);
-  });
+db.sequelize
+	.sync()
+	.then(() => {
+		console.log("Synced db.");
+	})
+	.catch((err) => {
+		console.log("Failed to sync db: " + err.message);
+	});
 
 // simple route
-app.use("/api/v1/products", productRouter)
-app.use("/api/v1/auth", authRouter)
+app.use("/api/v1/products", productRouter);
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/hotel", hotelRouter);
+app.use("/api/v1/room", roomRouter);
+
 
 
 
